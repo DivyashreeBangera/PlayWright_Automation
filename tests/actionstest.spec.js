@@ -44,7 +44,6 @@ test('Automate DemoQA Practice Form', async () => { // Rename the test function
     console.log("Checkbox test passed: 'Reading' hobby selected and verified.");
 
 
-
   } catch (error) {//This block handles potential errors during the test execution and ensures that the browser is closed even if an error occurs.
     console.error('Test failed:', error);
   } finally {
