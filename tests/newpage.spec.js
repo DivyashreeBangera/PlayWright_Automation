@@ -2,11 +2,11 @@ const { test, expect } = require('@playwright/test');
 
 test('Handle new pages', async ({ browser }) => {
     const page1 = await browser.newPage(); // creates a new browser tab
-    
+    // Handling Single page
     await page1.goto('https://example.com');
     console.log('First Page URL:', page1.url());
 
-    // **Open a New Page**
+    // **Handling Multiple pages**
     const page2 = await browser.newPage();
     await page2.goto('https://playwright.dev');
     console.log('Second Page URL:', page2.url());
