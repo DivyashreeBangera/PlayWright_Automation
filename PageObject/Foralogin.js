@@ -1,5 +1,5 @@
 class ForaLoginPage {
-    constructor(page) {
+    constructor(page) { //initialize the object
         this.page = page;
         this.signin= page.getByText("Sign in here.")
         this.usernameField = page.locator('#username');
@@ -65,7 +65,7 @@ class ForaLoginPage {
         this.saveAndAddButton = page.locator('button:text("Save and add")');
 
         // Validating error messages when clicked on 'Save and Add' without filling mandatory fields
-        this.cardnumbererrorMessage = page.locator('div', { hasText: "Card number is required." });
+        this.cardnumbererrorMessage = page.locator('div.text-error', { hasText: 'Card number is required.' })
         this.expiryErrorMessage = page.locator('div:text("Expiring date is required.")');
         this.cvcErrorMessage = page.locator('div:text("CVC is required.")');
         this.cardholderfieldRequiredError = page.locator('div:text("This field is required.")');
@@ -88,9 +88,16 @@ class ForaLoginPage {
         this.cardsecurelyadded=page.locator('div:text("Your card is securely added to the credit card section")')
         this.gotit=page.locator('button:text("Got it")')
 
+        this.threedot=page.locator('button >> svg >> xpath=//*[name()="circle"]').first()
+        this.deleteclient=page.getByRole('button', { name: 'Delete Client' })
 
+        //verying fields in the delete client
+        this.deleteheader =page.getByRole('heading', { name: 'Delete Client' })
+        this.confirmationtext=page.locator('div', {hasText: 'Are you sure you want to delete client, xyz 123? This action is permanent.'})
+        this.cancelbutton=page.getByRole('button', { name: 'No, keep client' })
+        this.okbutton=page.locator('button', { hasText: 'Yes, delete client' })
 
-
+        this.nosearchresults=page.locator('h3', { hasText: 'No clients found' })
     }
 
     async goto() {
@@ -158,7 +165,7 @@ class ForaLoginPage {
         return this.clickfirstresult.click()
                 }
 async clickcreditcards(){
- return this.creditcard.click()
+ return this.creditcard.click({ force: true })
 }
 
 async clickaddcard(){
@@ -200,6 +207,23 @@ return this.creditcardcloseButton.click()
 async clickgotitbutton(){
 return this.gotit.click()
 }
+
+async clickthreedotitbutton(){
+return this.threedot.click()
+}
+
+async clickdeleteclientbutton(){
+return this.deleteclient.click()
+}
+
+async clicknokeepclientbutton(){
+return this.cancelbutton.click()
+ }
+
+async clickyesdeleteclientbutton(){
+return this.okbutton.click()
+}
+
 }
 
 

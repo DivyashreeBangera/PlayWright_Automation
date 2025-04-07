@@ -7,7 +7,7 @@ const customTest = base.extend({
         const user = { username: "reenaz+user5710@team899982.testinator.com", password: "Qaoncloud@01", successmessage:"Welcome, reenaz5710!",
              WrongUser: "wrong Username", WrongPass: "Wrong Password", ErrorMessage: "Unable to log in with provided credentials.",
             Clientheader: "Clients",
-            firstname:"Johnn3", middlename:"A", lastname:"Doe", preferredname:"Testing3",
+            firstname:"Test6", middlename:"A", lastname:"Doe", preferredname:"Testingqa123458",
             creditcardheader: "Credit Cards",
         cardnumber:"4242424242424242", expiringDate:"12/25", CVC:"123", Cardholder:"Tester", nickname:"test", Address:"123 Main St", Apt:"Apt 4B", City:"Metropolis", State:"NY", zipcode:"10001"};
         await use(user);  // Provides user credentials to test cases
@@ -49,7 +49,7 @@ customTest.describe.configure({ mode: 'serial' });
         await expect(await Foraloginpage.validateClientsPage()).toContain(ForauserData.Clientheader);       
     
         //Click on the "add client" button
-       /* await Foraloginpage.addclientbutton()
+    await Foraloginpage.addclientbutton()
         await page.waitForTimeout(2000);
 
         //validating the fields in the add new client pop-up window
@@ -87,13 +87,14 @@ customTest.describe.configure({ mode: 'serial' });
         //Click on any one client in client list page.
         await Foraloginpage.clickbacktoclients() //clicking back button*/
         await Foraloginpage.searchclient(ForauserData.preferredname)//seaching by prefrerred client name
+        await page.waitForTimeout(2000)
         await Foraloginpage.clickfirstsearchresult() //clicking first search result
-        await page.waitForTimeout(3000);
-        //await expect(Foraloginpage.clientname).toContainText(`${ForauserData.preferredname} ${ForauserData.lastname}`)//validating the client name in the details page
+        await page.waitForTimeout(2000);
+    await expect(Foraloginpage.clientname).toContainText(`${ForauserData.preferredname} ${ForauserData.lastname}`)//validating the client name in the details page
 
         //Click on the "Credit Cards" tab on the client detail page
         await Foraloginpage.clickcreditcards()
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(2000);
         await expect(Foraloginpage.creditcardheader).toHaveText(ForauserData.creditcardheader);
 
         //Click the "Add Card" button.
@@ -114,7 +115,7 @@ customTest.describe.configure({ mode: 'serial' });
         await expect(Foraloginpage.copiedLinkButton).toBeVisible(); //button should be changed to copied
 
         //Click on the "Add Card" button, then click on the "Enter manually" button.
-        await Foraloginpage.enterManuallyLink()
+        await Foraloginpage.clickentermanually()
         await page.waitForTimeout(2000);
 
         //validate fields in the 'Add payment card' page
@@ -134,36 +135,39 @@ customTest.describe.configure({ mode: 'serial' });
         await expect(Foraloginpage.saveAndAddButton).toBeVisible();
 
         //validating close icon
-       // await Foraloginpage.clickclosebutton()
-      //  await Foraloginpage.clickaddcard()
-      // await Foraloginpage.enterManuallyLink()
+     await Foraloginpage.clickclosebutton()
+   await Foraloginpage.clickaddcard()
+    await Foraloginpage.clickentermanually()
 
 
         // validate goback link
         await Foraloginpage.clickgobacklink()
-        await page.waitForTimeout(2000);
-        await Foraloginpage.enterManuallyLink()
-        await page.waitForTimeout(2000);
+       // await page.waitForTimeout(2000);
+        await Foraloginpage.clickentermanually()
+        //await page.waitForTimeout(2000);
 
         // Validating error messages when clicked on 'Save and Add' without filling mandatory fields
-        await Foraloginpage.saveAndAddButton() //clicking save and add button
+        await Foraloginpage.clicksaveandadd() //clicking save and add button
         await expect(Foraloginpage.cardnumbererrorMessage).toBeVisible();
         await expect(Foraloginpage.expiryErrorMessage).toBeVisible();
         await expect(Foraloginpage.cvcErrorMessage).toBeVisible();
-        await expect(Foraloginpage.cardholderfieldRequiredError).toBeVisible();
+        //await expect(Foraloginpage.cardholderfieldRequiredError).toBeVisible();
+        await expect(Foraloginpage.cardholderfieldRequiredError.nth(0)).toBeVisible(); // Expiry
+        await expect(Foraloginpage.cardholderfieldRequiredError.nth(1)).toBeVisible(); // CVC
+        await expect(Foraloginpage.cardholderfieldRequiredError.nth(2)).toBeVisible(); // Cardholder
 
         //validating close button
         await Foraloginpage.clickcreditclosebutton()
-        await expect(Foraloginpage.clickaddcard()).toBeVisible(); //verifying the add card button is visible 
+        await expect(Foraloginpage.addcard).toBeVisible(); //verifying the add card button is visible 
         await Foraloginpage.clickaddcard()
         await page.waitForTimeout(2000);
-        await Foraloginpage.enterManuallyLink()
+        await Foraloginpage.clickentermanually()
         await page.waitForTimeout(2000);
 
 
         //Enter valid details in the required fields and click the "Save and add" button
         await Foraloginpage.fillcarddetails(ForauserData.cardnumber, ForauserData.expiringDate, ForauserData.cvc, ForauserData.Cardholder,ForauserData.nickname,ForauserData.Address,ForauserData.Apt,ForauserData.City, ForauserData.State, ForauserData.zipcode)
-        await Foraloginpage.saveAndAddButton()
+        await Foraloginpage.clicksaveandadd()
 
         //The credit card details should be saved successfully, with a confirmation message appearing
         await expect(Foraloginpage.cardsuccessMessage).toBeVisible();
@@ -174,7 +178,27 @@ customTest.describe.configure({ mode: 'serial' });
         await Foraloginpage.clickgotitbutton()
 
         //Click on the three-dot icon next to the client name on the client detail page.
+        await Foraloginpage.clickthreedotitbutton()
+        await expect(Foraloginpage.deleteclient).toBeVisible(); //A popup should appear with the option to "Delete Client."
 
+        //click on "Delete Client."
+        await Foraloginpage.clickdeleteclientbutton()
+        await expect(Foraloginpage.deleteheader).toBeVisible(); //verifying the fields in the delete client 
+        await expect(Foraloginpage.confirmationtext).toBeVisible();
+        await expect(Foraloginpage.cancelbutton).toBeVisible();
+        await expect(Foraloginpage.okbutton).toBeVisible();
+
+        //Click on "No, keep client"
+        await Foraloginpage.clicknokeepclientbutton()
+        await expect(Foraloginpage.deleteheader).not.toBeVisible(); //pop up is not visible
+        //await expect(Foraloginpage.clientname).toContainText(`${ForauserData.preferredname} ${ForauserData.lastname}`)//validating the The client is visible and not deleted.
+
+       // Click on "Yes, delete client"
+       await Foraloginpage.clickyesdeleteclientbutton()
+       await page.waitForTimeout(3000);
+       await expect(await Foraloginpage.validateClientsPage()).toContain(ForauserData.Clientheader); //verying the client is deleted and page is navigated to clients page
+       await Foraloginpage.searchclient(ForauserData.preferredname)//seaching by DELETED client name
+       await expect(Foraloginpage.deleteheader).not.toBeVisible(); //verying the no results found after searching the deleted client name
     });
 
 })
