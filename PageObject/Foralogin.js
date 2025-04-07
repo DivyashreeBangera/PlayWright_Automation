@@ -71,9 +71,11 @@ class ForaLoginPage {
         this.cardholderfieldRequiredError = page.locator('div:text("This field is required.")');
 
         //Enter valid details in the required fields and click the "Save and add" button
-        this.cardNumberInput = page.locator('input[name="cardNumber"]');
+        this.cardIframe = page.frameLocator('#tx_iframe_card-tokenex-element');
+        this.cvcIframe = page.frameLocator('#tx_iframe_cvv-tokenex-element');
+        this.cardNumberInput = this.cardIframe.locator('input[name="cardNumber"]');
         this.expiringDateInput = page.locator('input[name="expiringDate"]');
-        this.cvcInput = page.locator('input[name="Data"]');
+        this.cvcInput = this.cvcIframe.locator('input[placeholder="CVC"]');
         this.cardHolderInput = page.locator('input[name="cardHolder"]');
         this.nicknameInput = page.locator('input[placeholder="Enter card label"]');
         this.countryInput = page.locator('#country_id');
@@ -93,7 +95,7 @@ class ForaLoginPage {
 
         //verying fields in the delete client
         this.deleteheader =page.getByRole('heading', { name: 'Delete Client' })
-        this.confirmationtext=page.locator('div', {hasText: 'Are you sure you want to delete client, xyz 123? This action is permanent.'})
+        this.confirmationtext=page.locator('div.text-medium.font-medium.text-secondaryDark');
         this.cancelbutton=page.getByRole('button', { name: 'No, keep client' })
         this.okbutton=page.locator('button', { hasText: 'Yes, delete client' })
 
@@ -188,9 +190,30 @@ return this.saveAndAddButton.click()
 }
 
 async fillcarddetails(cardnumber, expiringDate, CVC, Cardholder,nickname,Address, Apt, City, State,zipcode){
-await this.cardNumberInput.fill(cardnumber)
+await this.cardNumberInput.waitFor({ state: 'visible' });
+
+//await this.cardNumberInput.scrollIntoViewIfNeeded();
+await this.cardNumberInput.click({ force: true });
+//await this.cardNumberInput.fill(''); // Clear first
+//await this.cardNumberInput.type(cardnumber, { delay: 100 });
+//await this.cardNumberInput.fill(cardnumber);
+
+//*************for firefox
+//await this.cardNumberInput.fill(''); // Clear input
+await this.page.waitForTimeout(500);
+    for (const digit of cardnumber) {
+        await this.cardNumberInput.type(digit, { delay: 200 });
+        await this.page.waitForTimeout(200); // Slow typing
+    }
+//await this.cardNumberInput.click()
+//await this.page.waitForTimeout(100);
+//await this.cardNumberInput.type(cardnumber, { delay: 200 });
+await this.cardNumberInput.fill(cardnumber);
+await this.expiringDateInput.click()
 await this.expiringDateInput.fill(expiringDate)
-await this.cvcInput.fill(CVC)
+await this.cvcInput.waitFor({ state: 'visible' });
+
+await this.cvcInput.fill(CVC);
 await this.cardHolderInput.fill(Cardholder)
 await this.nicknameInput.fill(nickname)
 await this.address.fill(Address)
